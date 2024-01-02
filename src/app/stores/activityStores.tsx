@@ -34,9 +34,10 @@ export default class ActivityStore {
   loadActivities = async () => {
     try {
       const activities = await agent.Activities.list();
-      console.log(activities);
+      //console.log(activities);
       activities.forEach((activity) => {
         this.setActivity(activity);
+        console.log(activity);
       });
       this.setLoadingInitial(false);
     } catch (error) {
