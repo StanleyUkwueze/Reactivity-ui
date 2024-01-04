@@ -1,5 +1,4 @@
 import { useField } from "formik";
-import React from "react";
 import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import { Form, Label } from "semantic-ui-react";
 
