@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
 import { Button, Form, Header, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
@@ -19,7 +19,6 @@ export default observer(function ActivityForm() {
   const { activityStore } = useStore();
 
   const {
-    selectedActivity,
     createActivity,
     updateActivity,
     loading,
