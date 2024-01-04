@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.min.css";
 import { router } from "./app/router/Router";
 import { store, StoreContext } from "./app/stores/store";
 import { RouterProvider } from "react-router-dom";
+import "react-datepicker/dist/react-datepicker.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
