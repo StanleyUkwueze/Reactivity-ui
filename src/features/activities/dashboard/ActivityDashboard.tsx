@@ -16,7 +16,7 @@ export default observer(function ActivityDashboard() {
   }, [loadActivities]);
 
   if (activityStore.loadingInitial) {
-    return <LoadingComponent content="app loading..." />;
+    return <LoadingComponent content="Loading activities..." />;
   }
 
   //const { selectedActivity, editMode } = activityStore;
