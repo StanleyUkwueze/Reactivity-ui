@@ -3,6 +3,8 @@ import agent from "../api/agent";
 import { v4 as uuidv4 } from "uuid";
 import { Activities } from "../layout/model/activity";
 import { format } from "date-fns";
+import { store } from "./store";
+import { Profile } from "../layout/model/profile";
 
 export default class ActivityStore {
   activityRegistry = new Map<string, Activities>();
@@ -70,6 +72,19 @@ export default class ActivityStore {
   };
 
   private setActivity = (activity: Activities) => {
+    const user = store.userStore.user;
+
+    if (user) {
+      activity.isGoing = activity.attendees!.some(
+        (x) => x.username === user.userName
+      );
+
+      activity.isHost = activity.hostUserName === user.userName;
+      activity.host = activity.attendees!.find(
+        (x) => x.username === activity.hostUserName
+      );
+    }
+
     activity.date = new Date(activity.date!);
     this.activityRegistry.set(activity.id, activity);
   };
@@ -94,17 +109,19 @@ export default class ActivityStore {
   //   };
 
   createActivity = async (activity: Activities) => {
+    const user = store.userStore.user;
+    const attendee = new Profile(user!);
     this.loading = true;
     activity.id = uuidv4();
 
     try {
       await agent.Activities.create(activity);
-
+      const newActivity = new Activities(activity);
+      newActivity.hostUserName = user!.userName;
+      newActivity.attendees = [attendee];
+      this.setActivity(newActivity);
       runInAction(() => {
-        this.activityRegistry.set(activity.id, activity);
-        this.selectedActivity = activity;
-        this.editMode = false;
-        this.loading = false;
+        this.selectedActivity = newActivity;
       });
     } catch (error) {
       console.log(error);
@@ -115,17 +132,20 @@ export default class ActivityStore {
   };
 
   updateActivity = async (activity: Activities) => {
-    this.loading = true;
     try {
       await agent.Activities.update(activity);
       runInAction(() => {
-        this.activityRegistry.set(activity.id, activity);
-        this.selectedActivity = activity;
-        this.editMode = false;
-        this.loading = false;
+        if (activity.id) {
+          const updatedActivity = {
+            ...this.getActivity(activity.id),
+            ...activity,
+          };
+          this.activityRegistry.set(activity.id, updatedActivity);
+          this.selectedActivity = updatedActivity;
+        }
       });
     } catch (error) {
-      this.loading = false;
+      console.log(error);
     }
   };
 
@@ -143,6 +163,54 @@ export default class ActivityStore {
         this.loading = false;
         this.editMode = false;
       });
+    }
+  };
+
+  updateAttendeance = async () => {
+    const user = store.userStore.user;
+    this.loading = true;
+    try {
+      await agent.Activities.attend(this.selectedActivity!.id);
+      runInAction(() => {
+        if (this.selectedActivity?.isGoing) {
+          this.selectedActivity.attendees =
+            this.selectedActivity.attendees?.filter(
+              (a) => a.username !== user?.userName
+            );
+          this.selectedActivity.isGoing = false;
+        } else {
+          const attendee = new Profile(user!);
+          this.selectedActivity?.attendees?.push(attendee);
+          this.selectedActivity!.isGoing = true;
+        }
+        this.activityRegistry.set(
+          this.selectedActivity!.id,
+          this.selectedActivity!
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      runInAction(() => (this.loading = false));
+    }
+  };
+
+  cancelActivityToggle = async () => {
+    this.loading = true;
+    try {
+      await agent.Activities.attend(this.selectedActivity!.id);
+      runInAction(() => {
+        this.selectedActivity!.isCancelled =
+          !this.selectedActivity!.isCancelled;
+        this.activityRegistry.set(
+          this.selectedActivity!.id,
+          this.selectedActivity!
+        );
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      runInAction(() => (this.loading = false));
     }
   };
 }
