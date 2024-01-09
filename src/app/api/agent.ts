@@ -83,6 +83,7 @@ const Activities = {
   update: (activity: Activities) =>
     axios.put<void>(`/activities/${activity.id}`, activity),
   delete: (id: string) => axios.delete<void>(`/activities/${id}`),
+  attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),
 };
 
 const Account = {

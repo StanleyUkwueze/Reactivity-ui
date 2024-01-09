@@ -11,13 +11,18 @@ import ActivityDetailedSideBar from "./activityDetailedSideBar";
 
 export default observer(function ActivityDetails() {
   const { activityStore } = useStore();
-  const { selectedActivity, loadActivity, loadingInitial } = activityStore;
+  const {
+    selectedActivity: activity,
+    loadActivity,
+    loadingInitial,
+  } = activityStore;
   const { id } = useParams();
 
   useEffect(() => {
     if (id) loadActivity(id);
   }, [id, loadActivity]);
-  if (loadingInitial || !selectedActivity) return <LoadingComponent />;
+  if (loadingInitial || !activity)
+    return <LoadingComponent content="Loading activity..." />;
   return (
     // <Card fluid>
     //   <img src={`/assets/categoryImages/${selectedActivity?.category}.jpg`} />
@@ -50,13 +55,13 @@ export default observer(function ActivityDetails() {
 
     <Grid>
       <Grid.Column width={10}>
-        <ActivityDetailedHeader activity={selectedActivity} />
-        <ActivityDetailedInfo activity={selectedActivity} />
+        <ActivityDetailedHeader activity={activity} />
+        <ActivityDetailedInfo activity={activity} />
         <ActivityDetailedChat />
       </Grid.Column>
 
       <Grid.Column width={6}>
-        <ActivityDetailedSideBar />
+        <ActivityDetailedSideBar activity={activity} />
       </Grid.Column>
     </Grid>
   );

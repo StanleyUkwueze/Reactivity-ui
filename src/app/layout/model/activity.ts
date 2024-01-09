@@ -1,4 +1,6 @@
-export interface Activities {
+import { Profile } from "./profile";
+
+export interface IActivities {
   id: string;
   title: string;
   date: Date | null;
@@ -6,4 +8,57 @@ export interface Activities {
   description: string;
   city: string;
   venue: string;
+  hostUserName: string;
+  isGoing: boolean;
+  isHost: boolean;
+  isCancelled: boolean;
+  host?: Profile;
+  attendees?: Profile[];
+}
+
+export class Activities implements IActivities {
+  constructor(init: ActivityFormValues) {
+    this.id = init.id!;
+    this.title = init.title;
+    this.category = init.category;
+    this.description = init.description;
+    this.date = init.date;
+    this.venue = init.venue;
+    this.city = init.city;
+  }
+  id: string;
+  title: string;
+  date: Date | null;
+  category: string;
+  description: string;
+  city: string;
+  venue: string;
+  hostUserName: string = "";
+  isCancelled: boolean = false;
+  isGoing: boolean = false;
+  isHost: boolean = false;
+  host?: Profile | undefined;
+  attendees?: Profile[];
+}
+
+export class ActivityFormValues {
+  id?: string = undefined;
+  title: string = "";
+  category: string = "";
+  description: string = "";
+  date: Date | null = null;
+  city: string = "";
+  venue: string = "";
+
+  constructor(activity?: ActivityFormValues) {
+    if (activity) {
+      this.id = activity.id;
+      this.title = activity.title;
+      this.category = activity.category;
+      this.description = activity.description;
+      this.date = activity.date;
+      this.venue = activity.venue;
+      this.city = activity.city;
+    }
+  }
 }
