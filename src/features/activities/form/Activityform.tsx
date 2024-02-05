@@ -4,7 +4,6 @@ import { Button, Form, Header, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  Activities,
   ActivityFormValues,
 } from "../../../app/layout/model/activity";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
@@ -24,7 +23,6 @@ export default observer(function ActivityForm() {
   const {
     createActivity,
     updateActivity,
-    loading,
     loadActivity,
     loadingInitial,
   } = activityStore;
@@ -51,17 +49,38 @@ export default observer(function ActivityForm() {
       );
   }, [id, loadActivity]);
 
-  function handleFormSubmit(activity: Activities) {
-    if (!activity!.id) {
-      activity!.id = uuidv4();
-      createActivity(activity!).then(() =>
-        navigate(`/activities/${activity!.id}`)
-      );
+//   function handleFormSubmit(activity: ActivityFormValues) {
+//     if (!activity.id) {
+//         let newActivity = {
+//             ...activity,
+//             id: uuid()
+//         }
+//         createActivity(newActivity).then(() => navigate(`/activities/${newActivity.id}`))
+//     } else {
+//         updateActivity(activity).then(() => navigate(`/activities/${activity.id}`))
+//     }
+// }
+
+  function handleFormSubmit(activity: ActivityFormValues) {
+    if (!activity.id) {
+      let newActivity = {
+          ...activity,
+          id: uuidv4()
+      }
+      createActivity(newActivity).then(() => navigate(`/activities/${newActivity.id}`))
     } else {
-      updateActivity(activity!).then(() =>
-        navigate(`/activities/${activity!.id}`)
-      );
+        updateActivity(activity).then(() => navigate(`/activities/${activity.id}`))
     }
+    // if (!activity!.id) {
+    //   activity!.id = uuidv4();
+    //   createActivity(activity!).then(() =>
+    //     navigate(`/activities/${activity!.id}`)
+    //   );
+    // } else {
+    //   updateActivity(activity!).then(() =>
+    //     navigate(`/activities/${activity!.id}`)
+    //   );
+    // }
   }
 
   if (loadingInitial) return <LoadingComponent content="Loading activity..." />;

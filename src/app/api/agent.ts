@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Activities } from "../layout/model/activity";
+import { Activities, ActivityFormValues } from "../layout/model/activity";
 import { toast } from "react-toastify";
 import { router } from "../router/Router";
 import { store } from "../stores/store";
@@ -11,7 +11,7 @@ const sleep = (delay: number) => {
   });
 };
 
-axios.defaults.baseURL = "http://localhost:5000/api";
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token;
@@ -21,7 +21,7 @@ axios.interceptors.request.use((config) => {
 
 axios.interceptors.response.use(
   async (response) => {
-    await sleep(1000);
+   if(import.meta.env.DEV) await sleep(1000);
     return response;
   },
   (error: AxiosError) => {
@@ -76,11 +76,11 @@ const requests = {
   del: <T>(url: string) => axios.delete<T>(url).then(responseBody),
 };
 
-const Activities = {
+const activities = {
   list: () => requests.get<Activities[]>("/activities"),
   detail: (id: string) => requests.get<Activities>(`/activities/${id}`),
-  create: (activity: Activities) => axios.post<void>("/activities", activity),
-  update: (activity: Activities) =>
+  create: (activity: ActivityFormValues) => axios.post<void>("/activities", activity),
+  update: (activity: ActivityFormValues) =>
     axios.put<void>(`/activities/${activity.id}`, activity),
   delete: (id: string) => axios.delete<void>(`/activities/${id}`),
   attend: (id: string) => requests.post<void>(`/activities/${id}/attend`, {}),
@@ -94,7 +94,7 @@ const Account = {
 };
 
 const agent = {
-  Activities,
+  activities,
   Account,
 };
 

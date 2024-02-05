@@ -4,11 +4,10 @@ import { observer } from "mobx-react-lite";
 import { useLocation, Outlet, ScrollRestoration } from "react-router-dom";
 import HomePage from "../../features/home/HomePage";
 import { ToastContainer } from "react-toastify";
-import UserStore from "../stores/userStore";
 import { useStore } from "../stores/store";
 import { useEffect } from "react";
 import LoadingComponent from "./LoadingComponent";
-import ModalContainer from "../common/form/modals/modalContainer";
+import ModalContainer from "../common/form/modals/ModalContainer";
 
 function App() {
   const location = useLocation();

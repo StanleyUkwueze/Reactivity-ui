@@ -18,14 +18,14 @@ export default class CommentStore {
     createHubConnection = (activityId: string) => {
         if (store.activityStore.selectedActivity) {
             this.hubConnection = new HubConnectionBuilder()
-                .withUrl("http:localhost:5000/chat?activityId=" + activityId, {
+                .withUrl(import.meta.env.VITE_CHAT_URL + "/chat?activityId=" + activityId, {
                     accessTokenFactory: () => store.userStore.user?.token!
                 })
                 .withAutomaticReconnect()
                 .configureLogging(LogLevel.Information)
                 .build();
 
-            this.hubConnection.start().catch(error => console.log("Error establishing the connection to chathub"));
+            this.hubConnection.start().catch(error => console.log("Error ${error} establishing the connection to chathub", error));
             this.hubConnection.on("LoadComments", (comments: ChatComment[]) => {
                 runInAction(() => this.comments = comments);
             })

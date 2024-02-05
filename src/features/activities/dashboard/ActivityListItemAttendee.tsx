@@ -1,4 +1,3 @@
-import React from "react";
 import { Image, List, Popup } from "semantic-ui-react";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";

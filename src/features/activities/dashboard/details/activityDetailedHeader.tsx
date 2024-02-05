@@ -6,7 +6,6 @@ import {
   Segment,
   Image,
   Label,
-  Loader,
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { format } from "date-fns";

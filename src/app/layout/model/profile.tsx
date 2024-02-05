@@ -1,10 +1,11 @@
 import { User } from "./user";
 
-export interface IProfile {
+export interface Profile {
   username: string;
   displayName: string;
   image?: string;
   bio?: string;
+  following: boolean;
 }
 
 // export class Profile implements Profile {
@@ -28,27 +29,30 @@ export interface IProfile {
 //     date: Date;
 // }s
 
-export class Profile implements IProfile {
+export class Profile implements Profile {
   constructor(user: User) {
     this.username = user.userName;
     this.displayName = user.displayName;
     this.image = user.image;
+    
   }
   username: string;
   displayName: string;
   image?: string;
   bio?: string;
+ 
+  
 }
 
 export interface Activities {
   id: string;
-  titles: string;
+  title: string;
   date: Date | null;
   description: string;
   category: string;
   city: string;
   venue: string;
-  hostUSerName: string;
+  hostUserName: string;
   isCancelled?: boolean;
   isGoing?: boolean;
   isHost?: boolean;
