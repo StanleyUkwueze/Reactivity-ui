@@ -1,6 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
-//import { v4 as uuidv4 } from "uuid";
 import { Activities, ActivityFormValues } from "../layout/model/activity";
 import { format } from "date-fns";
 import { store } from "./store";
@@ -91,27 +90,12 @@ export default class ActivityStore {
   setLoadingInitial(state: boolean) {
     this.loadingInitial = state;
   }
-  //   selectActivity = (id: string) => {
-  //     this.selectedActivity = this.activityRegistry.get(id);
-  //   };
 
-  //   cancelSelectedActivity = () => {
-  //     this.selectedActivity = undefined;
-  //   };
 
-  //   openForm = (id?: string) => {
-  //     id ? this.selectActivity(id) : this.cancelSelectedActivity();
-  //     this.editMode = true;
-  //   };
-
-  //   closeForm = () => {
-  //     this.editMode = false;
-  //   };
-
-//
+  
 
 createActivity = async (activity: ActivityFormValues) => {
-  const user = store.userStore!.user;
+  const user = store.userStore.user;
   const profile = new Profile(user!);
   try {
       await agent.activities.create(activity);
