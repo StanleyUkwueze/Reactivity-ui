@@ -215,4 +215,15 @@ createActivity = async (activity: ActivityFormValues) => {
       runInAction(() => (this.loading = false));
     }
   };
+
+  updateAttendeeFollowing = (username: string) => {
+    this.activityRegistry.forEach(activity => {
+        activity.attendees!.forEach((attendee: Profile) => {
+            if (attendee.username === username) {
+                attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+                attendee.following = !attendee.following;
+            }
+        })
+    })
+}
 }

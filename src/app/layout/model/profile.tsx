@@ -6,6 +6,10 @@ export interface Profile {
   image?: string;
   bio?: string;
   following: boolean;
+  followingCount: number;
+  followersCount: number;
+  photos?: Photo[];
+
 }
 
 // export class Profile implements Profile {
@@ -40,6 +44,8 @@ export class Profile implements Profile {
   displayName: string;
   image?: string;
   bio?: string;
+  followingCount =0;
+  followersCount =0;
  
   
 }
@@ -58,4 +64,17 @@ export interface Activities {
   isHost?: boolean;
   host?: Profile;
   attendees?: Profile[];
+}
+
+export interface Photo {
+  id: string;
+  url: string;
+  isMain: boolean;
+}
+
+export interface UserActivity {
+  id: string;
+  title: string;
+  category: string;
+  date: Date;
 }

@@ -28,7 +28,7 @@ export default observer(function ActivityListItemAttendee({
                 style={attendee.following ? styles : null}
                 bordered
                 circular
-                src={attendee.image || `/assets/user.png`}
+                src={attendee.image ?? `/assets/user.png`}
               />
             </List.Item>
           }
