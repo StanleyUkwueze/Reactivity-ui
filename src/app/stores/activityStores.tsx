@@ -224,6 +224,10 @@ createActivity = async (activity: ActivityFormValues) => {
                 attendee.following = !attendee.following;
             }
         })
-    })
+    }) 
+}
+
+clearSelectedActivity=()=>{
+  this.selectedActivity = undefined;
 }
 }
